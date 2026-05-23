@@ -4,10 +4,12 @@ import Footer from './components/Footer'
 import Inicio from './pages/Inicio'
 import DiagnosticoGeneral from './pages/DiagnosticoGeneral'
 import DiagnosticoEspecifico from './pages/DiagnosticoEspecifico'
+import TourGuide from './components/TourGuide'
 
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
+      <TourGuide />
       <Header />
       <main className="flex-grow">
         <Routes>

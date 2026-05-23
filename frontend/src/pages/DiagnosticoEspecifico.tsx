@@ -83,18 +83,6 @@ export default function DiagnosticoEspecifico() {
     s6: 0,
   })
   const [hasEvaluated, setHasEvaluated] = useState(false)
-  const [showTutorial, setShowTutorial] = useState(true)
-
-  useEffect(() => {
-    if (showTutorial) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [showTutorial])
 
   const bannerReveal = useScrollReveal<HTMLDivElement>()
   const patientReveal = useScrollReveal<HTMLDivElement>()
@@ -174,7 +162,7 @@ export default function DiagnosticoEspecifico() {
           {/* Disease Selection Card */}
           <div
             ref={diseaseReveal.ref}
-            className={`bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col gap-6 card-hover reveal-left ${diseaseReveal.isVisible ? 'is-visible' : ''}`}
+            className={`tour-de-enfermedades bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col gap-6 card-hover reveal-left ${diseaseReveal.isVisible ? 'is-visible' : ''}`}
             style={{ transitionDelay: '150ms' }}
           >
             <div className="flex items-center justify-between border-b border-surface-container-high pb-4">
@@ -228,7 +216,7 @@ export default function DiagnosticoEspecifico() {
           {/* Symptoms Grid */}
           <div
             ref={symptomsReveal.ref}
-            className={`bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col gap-8 card-hover reveal-left ${symptomsReveal.isVisible ? 'is-visible' : ''} ${showTutorial ? 'relative z-[101] ring-4 ring-primary-container/30 bg-surface' : ''}`}
+            className={`tour-de-sintomas bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col gap-8 card-hover reveal-left ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
             style={{ transitionDelay: '300ms' }}
           >
             <div className="flex items-center gap-3 border-b border-surface-container-high pb-4">
@@ -278,7 +266,7 @@ export default function DiagnosticoEspecifico() {
 
           <button
             onClick={handleEvaluate}
-            className={`btn-primary bg-primary-container text-white py-4 px-8 rounded-xl font-bold text-body-lg shadow-md w-full md:w-auto self-end flex items-center justify-center gap-2 ${showTutorial ? 'relative z-[101] ring-4 ring-primary-container/30 animate-pulse-glow' : ''}`}
+            className="tour-de-btn btn-primary bg-primary-container text-white py-4 px-8 rounded-xl font-bold text-body-lg shadow-md w-full md:w-auto self-end flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined">science</span>
             Evaluar Síntomas
@@ -339,47 +327,6 @@ export default function DiagnosticoEspecifico() {
           </div>
         </div>
       </div>
-
-      {/* Tutorial Overlay */}
-      {showTutorial && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center pointer-events-auto">
-          {/* Gray out background */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" onClick={() => setShowTutorial(false)} />
-          
-          {/* Tutorial Message Box */}
-          <div className="relative bg-surface-container-lowest text-on-surface p-6 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] border border-primary-container/30 max-w-[450px] mx-4 animate-fade-in-up z-[101] md:ml-[35%] lg:ml-[25%]">
-            <button 
-              onClick={() => setShowTutorial(false)}
-              className="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors bg-surface-container-low rounded-full p-1 flex items-center justify-center hover:bg-surface-container-high"
-              aria-label="Cerrar tutorial"
-            >
-              <span className="material-symbols-outlined text-[20px]">close</span>
-            </button>
-            <div className="flex items-start gap-4 pr-6">
-              <div className="bg-primary-fixed text-primary-container p-2 rounded-full mt-1">
-                <span className="material-symbols-outlined text-[24px]">psychiatry</span>
-              </div>
-              <div>
-                <h4 className="text-headline-sm font-bold text-primary-container mb-2 tracking-tight">Cómo funciona la Lógica Difusa</h4>
-                <p className="text-body-md text-on-surface-variant mb-4 leading-relaxed">
-                  A diferencia de un diagnóstico normal donde los síntomas son simplemente "Sí" o "No", aquí debes 
-                  ajustar la <strong className="text-on-surface">intensidad exacta (0 a 100)</strong> de cada síntoma.
-                </p>
-                <p className="text-body-md text-on-surface-variant leading-relaxed">
-                  Ajusta los valores y luego presiona <strong className="text-primary font-semibold">Evaluar Síntomas</strong>. 
-                  El sistema cruzará estos datos difusos para calcular la probabilidad exacta de las enfermedades seleccionadas.
-                </p>
-                <button 
-                  onClick={() => setShowTutorial(false)}
-                  className="mt-6 bg-primary-container text-on-primary px-6 py-2 rounded-lg text-label-md font-semibold hover:bg-[#0f2444] transition-colors w-full shadow-sm"
-                >
-                  ¡Entendido!
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

@@ -34,7 +34,7 @@ export default function Inicio() {
             <div className="mt-4 flex gap-4 justify-center w-full animate-fade-in-up delay-300">
               <Link
                 to="/diagnostico-general"
-                className="btn-primary bg-primary text-on-primary px-6 py-3 rounded-lg text-label-md shadow-md flex items-center gap-2"
+                className="tour-inicio-btn btn-primary bg-primary text-on-primary px-6 py-3 rounded-lg text-label-md shadow-md flex items-center gap-2"
               >
                 Comenzar Diagnóstico
                 <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">
@@ -53,7 +53,7 @@ export default function Inicio() {
       </section>
 
       {/* Technology Section */}
-      <section id="tecnologia" className="w-full bg-surface py-16 md:py-24">
+      <section id="tecnologia" className="tour-inicio-tecnologia w-full bg-surface py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto px-4 md:px-16 flex flex-col gap-12">
           <div
             ref={techSection.ref}

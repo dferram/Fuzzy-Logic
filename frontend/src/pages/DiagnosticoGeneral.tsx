@@ -202,7 +202,7 @@ export default function DiagnosticoGeneral() {
       {/* Patient Info */}
       <section
         ref={patientReveal.ref}
-        className={`bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${patientReveal.isVisible ? 'is-visible' : ''}`}
+        className={`tour-dg-paciente bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${patientReveal.isVisible ? 'is-visible' : ''}`}
       >
         <h2 className="text-headline-md text-primary-container mb-6 border-b border-surface-container-highest pb-4">
           Información del Paciente
@@ -228,7 +228,7 @@ export default function DiagnosticoGeneral() {
       {/* Symptoms Grid */}
       <section
         ref={symptomsReveal.ref}
-        className={`bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
+        className={`tour-dg-sintomas bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
       >
         <h2 className="text-headline-md text-primary-container mb-8 border-b border-surface-container-highest pb-4">
           Evaluación de Síntomas
@@ -281,7 +281,7 @@ export default function DiagnosticoGeneral() {
         <div className="mt-12 flex justify-end">
           <button
             onClick={handleCalculate}
-            className="btn-primary bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container"
+            className="tour-dg-btn btn-primary bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container"
           >
             <span className="material-symbols-outlined">calculate</span>
             Calcular Diagnóstico
