@@ -116,7 +116,33 @@ body {
 .animate-grow-width {
   animation: growWidth 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+@keyframes sweep-mask-anim {
+  0% { 
+    -webkit-mask-position: -800px 0; 
+    mask-position: -800px 0; 
+  }
+  100% { 
+    -webkit-mask-position: 2400px 0; 
+    mask-position: 2400px 0; 
+  }
+}
 
+.animate-sweep {
+  -webkit-mask-image: linear-gradient(to right, transparent 0px, rgba(0,0,0,0.05) 100px, rgba(0,0,0,0.8) 780px, black 800px, transparent 800px);
+  -webkit-mask-size: 800px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: linear-gradient(to right, transparent 0px, rgba(0,0,0,0.05) 100px, rgba(0,0,0,0.8) 780px, black 800px, transparent 800px);
+  mask-size: 800px 100%;
+  mask-repeat: no-repeat;
+  animation: sweep-mask-anim 8s linear infinite;
+}
+
+.bg-ekg-grid {
+  background-image: 
+    linear-gradient(rgba(239, 68, 68, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
 .animate-pulse-glow {
   animation: pulseGlow 2s ease-in-out infinite;
 }

@@ -13,7 +13,35 @@ export default function Inicio() {
     <>
       {/* Hero Section */}
       <section className="relative w-full bg-surface-container-lowest overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-4 md:px-16 py-16 md:py-32 flex flex-col items-center justify-center text-center min-h-[500px]">
+        {/* Animated Heartbeat Monitor Background */}
+        <div className="absolute top-[35%] -translate-y-1/2 left-0 w-full h-40 pointer-events-none opacity-[0.5] z-0 overflow-hidden bg-ekg-grid">
+          <div className="absolute left-0 top-0 h-full w-[2400px]">
+            <svg
+              className="w-full h-full animate-sweep"
+              preserveAspectRatio="none"
+              viewBox="0 0 2400 120"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+              <path
+                d="M 0 80 L 15 80 L 25 60 L 35 80 L 45 80 L 55 100 L 70 10 L 85 110 L 95 80 L 110 80 L 125 50 L 140 80 L 300 80 L 315 80 L 325 60 L 335 80 L 345 80 L 355 100 L 370 10 L 385 110 L 395 80 L 410 80 L 425 50 L 440 80 L 600 80 L 615 80 L 625 60 L 635 80 L 645 80 L 655 100 L 670 10 L 685 110 L 695 80 L 710 80 L 725 50 L 740 80 L 900 80 L 915 80 L 925 60 L 935 80 L 945 80 L 955 100 L 970 10 L 985 110 L 995 80 L 1010 80 L 1025 50 L 1040 80 L 1200 80 L 1215 80 L 1225 60 L 1235 80 L 1245 80 L 1255 100 L 1270 10 L 1285 110 L 1295 80 L 1310 80 L 1325 50 L 1340 80 L 1500 80 L 1515 80 L 1525 60 L 1535 80 L 1545 80 L 1555 100 L 1570 10 L 1585 110 L 1595 80 L 1610 80 L 1625 50 L 1640 80 L 1800 80 L 1815 80 L 1825 60 L 1835 80 L 1845 80 L 1855 100 L 1870 10 L 1885 110 L 1895 80 L 1910 80 L 1925 50 L 1940 80 L 2100 80 L 2115 80 L 2125 60 L 2135 80 L 2145 80 L 2155 100 L 2170 10 L 2185 110 L 2195 80 L 2210 80 L 2225 50 L 2240 80 L 2400 80"
+                stroke="#ef4444"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#glow)"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div className="max-w-[1200px] mx-auto px-4 md:px-16 py-16 md:py-32 flex flex-col items-center justify-center text-center min-h-[500px] relative z-10">
           <div className="z-10 flex flex-col items-center gap-6 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed rounded-full text-primary-container text-label-md w-fit animate-fade-in-down">
               <span className="material-symbols-outlined text-[16px]">
