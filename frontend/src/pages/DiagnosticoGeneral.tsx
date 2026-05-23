@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 interface SymptomSlider {
   id: string
@@ -85,6 +86,74 @@ const mockResults: ResultCard[] = [
   },
 ]
 
+function AnimatedProgressBar({
+  percentage,
+  color,
+  delay = 0,
+}: {
+  percentage: number
+  color: string
+  delay?: number
+}) {
+  const [width, setWidth] = useState(0)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setWidth(percentage), 100 + delay)
+    return () => clearTimeout(timer)
+  }, [percentage, delay])
+
+  return (
+    <div className="w-full bg-surface-container-highest rounded-full h-3 mb-8">
+      <div
+        className="h-3 rounded-full transition-all duration-1000 ease-out"
+        style={{ width: `${width}%`, backgroundColor: color }}
+      />
+    </div>
+  )
+}
+
+function AnimatedNumber({
+  value,
+  color,
+  delay = 0,
+}: {
+  value: number
+  color: string
+  delay?: number
+}) {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const duration = 800
+      const steps = 30
+      const stepTime = duration / steps
+      let step = 0
+
+      const interval = setInterval(() => {
+        step++
+        const progress = step / steps
+        const eased = 1 - Math.pow(1 - progress, 3) // ease-out cubic
+        setCurrent(Math.round(eased * value))
+        if (step >= steps) clearInterval(interval)
+      }, stepTime)
+
+      return () => clearInterval(interval)
+    }, delay)
+
+    return () => clearTimeout(timeout)
+  }, [value, delay])
+
+  return (
+    <span
+      className="text-[36px] leading-[40px] font-bold tracking-tight"
+      style={{ color }}
+    >
+      {current}%
+    </span>
+  )
+}
+
 export default function DiagnosticoGeneral() {
   const [patientName, setPatientName] = useState('')
   const [values, setValues] = useState<Record<string, number>>({
@@ -97,6 +166,10 @@ export default function DiagnosticoGeneral() {
   })
   const [showResults, setShowResults] = useState(false)
 
+  const bannerReveal = useScrollReveal<HTMLDivElement>()
+  const patientReveal = useScrollReveal<HTMLDivElement>()
+  const symptomsReveal = useScrollReveal<HTMLDivElement>()
+
   const handleSliderChange = (id: string, value: number) => {
     setValues((prev) => ({ ...prev, [id]: value }))
   }
@@ -106,9 +179,12 @@ export default function DiagnosticoGeneral() {
   }
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto px-4 md:px-16 py-12 flex flex-col gap-10">
+    <div className="w-full max-w-[1200px] mx-auto px-4 md:px-16 py-12 flex flex-col gap-10 page-enter">
       {/* Warning Banner */}
-      <div className="w-full bg-[#FAF0DA] border-l-4 border-[#D69E2E] p-4 rounded-r-xl flex items-start gap-4 shadow-sm">
+      <div
+        ref={bannerReveal.ref}
+        className={`w-full bg-[#FAF0DA] border-l-4 border-[#D69E2E] p-4 rounded-r-xl flex items-start gap-4 shadow-sm reveal ${bannerReveal.isVisible ? 'is-visible' : ''}`}
+      >
         <span className="material-symbols-outlined text-[#D69E2E] mt-0.5">
           warning
         </span>
@@ -124,7 +200,10 @@ export default function DiagnosticoGeneral() {
       </div>
 
       {/* Patient Info */}
-      <section className="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <section
+        ref={patientReveal.ref}
+        className={`bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${patientReveal.isVisible ? 'is-visible' : ''}`}
+      >
         <h2 className="text-headline-md text-primary-container mb-6 border-b border-surface-container-highest pb-4">
           Información del Paciente
         </h2>
@@ -147,17 +226,32 @@ export default function DiagnosticoGeneral() {
       </section>
 
       {/* Symptoms Grid */}
-      <section className="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <section
+        ref={symptomsReveal.ref}
+        className={`bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
+      >
         <h2 className="text-headline-md text-primary-container mb-8 border-b border-surface-container-highest pb-4">
           Evaluación de Síntomas
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
-          {symptoms.map((symptom) => (
-            <div key={symptom.id} className="flex flex-col gap-3">
+          {symptoms.map((symptom, i) => (
+            <div
+              key={symptom.id}
+              className={`flex flex-col gap-3 transition-all duration-500 ${
+                symptomsReveal.isVisible
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-4'
+              }`}
+              style={{
+                transitionDelay: symptomsReveal.isVisible
+                  ? `${i * 100}ms`
+                  : '0ms',
+              }}
+            >
               <div className="flex justify-between items-center mb-1">
                 <label className="text-body-lg font-semibold text-on-background flex items-center gap-3">
                   <span
-                    className="material-symbols-outlined text-primary-container/70 text-2xl"
+                    className="material-symbols-outlined text-primary-container/70 text-2xl transition-transform duration-300 hover:scale-125"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     {symptom.icon}
@@ -187,7 +281,7 @@ export default function DiagnosticoGeneral() {
         <div className="mt-12 flex justify-end">
           <button
             onClick={handleCalculate}
-            className="bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md hover:bg-[#0f2444] hover:shadow-lg transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container"
+            className="btn-primary bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container"
           >
             <span className="material-symbols-outlined">calculate</span>
             Calcular Diagnóstico
@@ -197,15 +291,16 @@ export default function DiagnosticoGeneral() {
 
       {/* Results Area */}
       {showResults && (
-        <section className="mt-6">
-          <h2 className="text-headline-lg text-primary-container mb-8">
+        <section className="mt-6 animate-fade-in-up">
+          <h2 className="text-headline-lg text-primary-container mb-8 animate-fade-in-up">
             Resultados del Análisis
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {mockResults.map((result) => (
+            {mockResults.map((result, i) => (
               <div
                 key={result.name}
-                className="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] relative overflow-hidden"
+                className="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] relative overflow-hidden card-hover animate-scale-in"
+                style={{ animationDelay: `${i * 200}ms` }}
               >
                 <div
                   className="absolute top-0 left-0 w-1.5 h-full"
@@ -221,26 +316,21 @@ export default function DiagnosticoGeneral() {
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <span
-                      className="text-[36px] leading-[40px] font-bold tracking-tight"
-                      style={{ color: result.color }}
-                    >
-                      {result.percentage}%
-                    </span>
+                    <AnimatedNumber
+                      value={result.percentage}
+                      color={result.color}
+                      delay={i * 200 + 300}
+                    />
                     <span className="text-label-sm text-on-surface-variant mt-1">
                       Confianza Lógica
                     </span>
                   </div>
                 </div>
-                <div className="w-full bg-surface-container-highest rounded-full h-3 mb-8">
-                  <div
-                    className="h-3 rounded-full"
-                    style={{
-                      width: `${result.percentage}%`,
-                      backgroundColor: result.color,
-                    }}
-                  />
-                </div>
+                <AnimatedProgressBar
+                  percentage={result.percentage}
+                  color={result.color}
+                  delay={i * 200 + 200}
+                />
                 <div className="pt-6 border-t border-surface-container-highest">
                   <h4 className="text-label-md font-semibold text-on-background tracking-wide mb-3">
                     Tratamiento Sugerido:
