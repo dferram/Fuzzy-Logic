@@ -33,12 +33,14 @@ export default function TourGuide() {
           target: '.tour-inicio-tecnologia',
           content: 'Aquí te explicamos la ventaja principal: usamos Lógica Difusa. En lugar de diagnósticos rígidos ("Sí" o "No"), evaluamos el nivel de intensidad real de los síntomas del paciente.',
           title: 'Nuestra Tecnología',
+          placement: 'top',
         },
         {
           target: '.tour-inicio-btn',
           content: 'Haz clic aquí cuando estés listo para comenzar el análisis.',
           title: 'Comienza tu diagnóstico',
           spotlightClicks: true,
+          placement: 'bottom',
         },
       ]
     } else if (location.pathname === '/diagnostico-general') {
@@ -48,16 +50,19 @@ export default function TourGuide() {
           content: 'Primero, ingresa el nombre del paciente para mantener un registro en la evaluación actual.',
           title: 'Datos Básicos',
           disableBeacon: true,
+          placement: 'bottom',
         },
         {
           target: '.tour-dg-sintomas',
           content: 'Ajusta la intensidad de cada síntoma. Por ejemplo, en lugar de solo decir que tiene fiebre, indica si es leve, fuerte o muy fuerte.',
           title: 'Evaluación Difusa',
+          placement: 'top',
         },
         {
           target: '.tour-dg-btn',
           content: 'Presiona Calcular para que el motor cruce los datos e infiera la probabilidad de cada enfermedad respiratoria.',
           title: 'Resultados Inmediatos',
+          placement: 'left',
         },
       ]
     } else if (location.pathname === '/diagnostico-especifico') {
@@ -67,16 +72,19 @@ export default function TourGuide() {
           content: 'Selecciona al menos 2 enfermedades de la base de conocimientos para comparar el cuadro clínico actual con los patrones teóricos.',
           title: 'Selección de Patrones',
           disableBeacon: true,
+          placement: 'bottom',
         },
         {
           target: '.tour-de-sintomas',
           content: 'Aquí la lógica difusa brilla: ajusta la barra en una escala de 0 a 100 para capturar la magnitud exacta del síntoma reportado por el paciente.',
           title: 'Precisión Milimétrica',
+          placement: 'top',
         },
         {
           target: '.tour-de-btn',
           content: 'Presiona "Evaluar Síntomas" para ver la probabilidad estadística de las patologías seleccionadas.',
           title: 'Motor de Inferencia',
+          placement: 'top',
         },
       ]
     }
@@ -117,7 +125,6 @@ export default function TourGuide() {
       hideCloseButton
       run={run}
       scrollToFirstStep
-      showProgress
       showSkipButton
       steps={steps}
       styles={{
