@@ -9,11 +9,13 @@ export default function TourGuide() {
   const [steps, setSteps] = useState<Step[]>([])
 
   useEffect(() => {
-    // Check if user has already seen the tour
-    const hasSeenTour = localStorage.getItem('medfuzzy-tour-completed')
-    if (!hasSeenTour) {
-      setRun(true)
+    // Escucha si se desactiva desde el menú de ajustes
+    const handleSettingsChange = () => {
+      const disabled = localStorage.getItem('medfuzzy-tutorial-disabled') === 'true'
+      if (disabled) setRun(false)
     }
+    window.addEventListener('tutorialSettingsChanged', handleSettingsChange)
+    return () => window.removeEventListener('tutorialSettingsChanged', handleSettingsChange)
   }, [])
 
   useEffect(() => {
@@ -90,36 +92,29 @@ export default function TourGuide() {
     }
 
     setSteps(routeSteps)
+    
+    // Check global toggle
+    const disabled = localStorage.getItem('medfuzzy-tutorial-disabled') === 'true'
+    
+    if (routeSteps.length > 0 && !disabled) {
+      setRun(true)
+    } else {
+      setRun(false)
+    }
   }, [location.pathname])
 
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status, type, action } = data
+    const { status } = data
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED]
 
     if (finishedStatuses.includes(status)) {
       setRun(false)
-      // Only mark as completed when they finish or skip the specific diagnosis tour
-      if (location.pathname === '/diagnostico-especifico') {
-        localStorage.setItem('medfuzzy-tour-completed', 'true')
-      }
-    }
-
-    // Auto-navigate to next page if they click "Next" on the last step of the home tour
-    if (action === 'next' && type === 'step:after' && location.pathname === '/') {
-      if (data.index === steps.length - 1) {
-        navigate('/diagnostico-general')
-      }
-    }
-    // Auto-navigate from general to specific
-    if (action === 'next' && type === 'step:after' && location.pathname === '/diagnostico-general') {
-      if (data.index === steps.length - 1) {
-        navigate('/diagnostico-especifico')
-      }
     }
   }
 
   return (
     <Joyride
+      key={location.pathname}
       callback={handleJoyrideCallback}
       continuous
       hideCloseButton

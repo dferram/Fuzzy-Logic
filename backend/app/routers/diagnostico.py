@@ -176,3 +176,36 @@ async def listar_sintomas():
         "total": len(SYMPTOM_NAMES),
         "sintomas": SYMPTOM_NAMES,
     }
+
+
+# ═══════════════════════════════════════════════════════════
+# GET /api/diagnostico/matriz  (Base de Conocimiento)
+# ═══════════════════════════════════════════════════════════
+@router.get(
+    "/matriz",
+    summary="Matriz de Lógica Difusa",
+    description="Devuelve la base de conocimiento completa con los valores difusos de cada síntoma por enfermedad.",
+    status_code=status.HTTP_200_OK,
+)
+async def obtener_matriz():
+    """
+    Retorna la colección completa de enfermedades con sus síntomas.
+    Útil para mostrar la tabla de la matriz de conocimiento en el frontend.
+    """
+    try:
+        db = get_database()
+        collection = db["enfermedades"]
+        # Excluimos el _id de MongoDB para la respuesta
+        cursor = collection.find({}, {"_id": 0})
+        enfermedades = await cursor.to_list(length=None)
+        return {
+            "total": len(enfermedades),
+            "matriz": enfermedades,
+        }
+
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Error de conexión a la base de datos: {str(e)}",
+        )
+

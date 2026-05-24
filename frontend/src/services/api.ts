@@ -63,6 +63,15 @@ export interface ListaEnfermedadesResponse {
   enfermedades: EnfermedadCatalogo[]
 }
 
+export interface MatrizEnfermedad extends EnfermedadCatalogo {
+  sintomas: Record<string, number>
+}
+
+export interface ListaMatrizResponse {
+  total: number
+  matriz: MatrizEnfermedad[]
+}
+
 // ═══════════════════════════════════════════════════════════
 // FUNCIONES DE API
 // ═══════════════════════════════════════════════════════════
@@ -128,6 +137,20 @@ export async function listarEnfermedades(): Promise<ListaEnfermedadesResponse> {
 
   if (!response.ok) {
     throw new Error(`Error ${response.status} al obtener enfermedades`)
+  }
+
+  return response.json()
+}
+
+/**
+ * GET /api/diagnostico/matriz
+ * Obtiene la matriz difusa completa (enfermedades + síntomas).
+ */
+export async function obtenerMatriz(): Promise<ListaMatrizResponse> {
+  const response = await fetch(`${BASE_URL}/matriz`)
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status} al obtener la matriz de conocimiento`)
   }
 
   return response.json()
