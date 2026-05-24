@@ -5,6 +5,7 @@ const navLinks = [
   { to: '/', label: 'Inicio' },
   { to: '/diagnostico-general', label: 'Diagnóstico General' },
   { to: '/diagnostico-especifico', label: 'Diagnóstico Específico' },
+  { to: '/base-conocimiento', label: 'Base de Conocimiento' },
 ]
 
 export default function Header() {

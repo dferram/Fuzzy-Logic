@@ -4,6 +4,7 @@ import Footer from './components/Footer'
 import Inicio from './pages/Inicio'
 import DiagnosticoGeneral from './pages/DiagnosticoGeneral'
 import DiagnosticoEspecifico from './pages/DiagnosticoEspecifico'
+import BaseConocimiento from './pages/BaseConocimiento'
 import TourGuide from './components/TourGuide'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/diagnostico-general" element={<DiagnosticoGeneral />} />
           <Route path="/diagnostico-especifico" element={<DiagnosticoEspecifico />} />
+          <Route path="/base-conocimiento" element={<BaseConocimiento />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

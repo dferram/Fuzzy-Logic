@@ -9,11 +9,7 @@ export default function TourGuide() {
   const [steps, setSteps] = useState<Step[]>([])
 
   useEffect(() => {
-    // Check if user has already seen the tour
-    const hasSeenTour = localStorage.getItem('medfuzzy-tour-completed')
-    if (!hasSeenTour) {
-      setRun(true)
-    }
+    // Ya no usamos localStorage. El tutorial arranca siempre al cambiar de ruta.
   }, [])
 
   useEffect(() => {
@@ -90,36 +86,27 @@ export default function TourGuide() {
     }
 
     setSteps(routeSteps)
+    
+    // Si hay pasos para esta ruta, mostramos el tutorial
+    if (routeSteps.length > 0) {
+      setRun(true)
+    } else {
+      setRun(false)
+    }
   }, [location.pathname])
 
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status, type, action } = data
+    const { status } = data
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED]
 
     if (finishedStatuses.includes(status)) {
       setRun(false)
-      // Only mark as completed when they finish or skip the specific diagnosis tour
-      if (location.pathname === '/diagnostico-especifico') {
-        localStorage.setItem('medfuzzy-tour-completed', 'true')
-      }
-    }
-
-    // Auto-navigate to next page if they click "Next" on the last step of the home tour
-    if (action === 'next' && type === 'step:after' && location.pathname === '/') {
-      if (data.index === steps.length - 1) {
-        navigate('/diagnostico-general')
-      }
-    }
-    // Auto-navigate from general to specific
-    if (action === 'next' && type === 'step:after' && location.pathname === '/diagnostico-general') {
-      if (data.index === steps.length - 1) {
-        navigate('/diagnostico-especifico')
-      }
     }
   }
 
   return (
     <Joyride
+      key={location.pathname}
       callback={handleJoyrideCallback}
       continuous
       hideCloseButton
