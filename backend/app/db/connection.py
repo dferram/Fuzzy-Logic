@@ -20,13 +20,13 @@ async def connect_to_mongo() -> None:
     Se llama desde el evento `startup` de FastAPI.
     """
     global _client, _database
-    print(f"🔌 Conectando a MongoDB en {settings.MONGODB_URI} ...")
+    print(f"[DB] Conectando a MongoDB en {settings.MONGODB_URI} ...")
     _client = AsyncIOMotorClient(settings.MONGODB_URI)
     _database = _client[settings.MONGODB_DB_NAME]
 
     # Verificar conectividad
     await _client.admin.command("ping")
-    print(f"✅ Conexión exitosa — Base de datos: {settings.MONGODB_DB_NAME}")
+    print(f"[DB] Conexion exitosa -- Base de datos: {settings.MONGODB_DB_NAME}")
 
 
 async def close_mongo_connection() -> None:
@@ -39,7 +39,7 @@ async def close_mongo_connection() -> None:
         _client.close()
         _client = None
         _database = None
-        print("🔒 Conexión a MongoDB cerrada.")
+        print("[DB] Conexion a MongoDB cerrada.")
 
 
 def get_database() -> AsyncIOMotorDatabase:

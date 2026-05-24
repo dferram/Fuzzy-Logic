@@ -33,18 +33,18 @@ async def lifespan(app: FastAPI):
     db = get_database()
     await seed_enfermedades(db)
 
-    print("🚀 FuzzyDx Backend iniciado correctamente.")
-    print(f"   📌 Entorno:   {settings.APP_ENV}")
-    print(f"   📌 Puerto:    {settings.APP_PORT}")
-    print(f"   📌 MongoDB:   {settings.MONGODB_DB_NAME}")
-    print(f"   📌 Umbral:    {settings.FUZZY_THRESHOLD}")
-    print(f"   📌 CORS:      {settings.cors_origins_list}")
+    print("[APP] FuzzyDx Backend iniciado correctamente.")
+    print(f"   > Entorno:   {settings.APP_ENV}")
+    print(f"   > Puerto:    {settings.APP_PORT}")
+    print(f"   > MongoDB:   {settings.MONGODB_DB_NAME}")
+    print(f"   > Umbral:    {settings.FUZZY_THRESHOLD}")
+    print(f"   > CORS:      {settings.cors_origins_list}")
 
     yield
 
     # ── SHUTDOWN ─────────────────────────────────────────
     await close_mongo_connection()
-    print("👋 FuzzyDx Backend detenido.")
+    print("[APP] FuzzyDx Backend detenido.")
 
 
 # ═══════════════════════════════════════════════════════════

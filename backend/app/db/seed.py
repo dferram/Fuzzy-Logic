@@ -92,22 +92,22 @@ async def seed_enfermedades(db: AsyncIOMotorDatabase) -> None:
 
     if count > 0:
         print(
-            f"📋 La colección 'enfermedades' ya contiene {count} documentos. "
+            f"[SEED] La coleccion 'enfermedades' ya contiene {count} documentos. "
             f"Seed omitido."
         )
         return
 
     documentos = _parse_csv()
     if not documentos:
-        print("⚠️  No se encontraron datos en el CSV para insertar.")
+        print("[SEED] No se encontraron datos en el CSV para insertar.")
         return
 
     result = await collection.insert_many(documentos)
     print(
-        f"🌱 Seed completado: {len(result.inserted_ids)} enfermedades "
-        f"insertadas en la colección 'enfermedades'."
+        f"[SEED] Seed completado: {len(result.inserted_ids)} enfermedades "
+        f"insertadas en la coleccion 'enfermedades'."
     )
 
     # Crear índice por nombre para búsquedas rápidas
     await collection.create_index("nombre", unique=True)
-    print("📇 Índice único creado en campo 'nombre'.")
+    print("[SEED] Indice unico creado en campo 'nombre'.")
