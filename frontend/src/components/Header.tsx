@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const navLinks = [
@@ -11,6 +11,20 @@ const navLinks = [
 export default function Header() {
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [tutorialEnabled, setTutorialEnabled] = useState(true)
+
+  useEffect(() => {
+    const disabled = localStorage.getItem('medfuzzy-tutorial-disabled') === 'true'
+    setTutorialEnabled(!disabled)
+  }, [])
+
+  const toggleTutorial = () => {
+    const newState = !tutorialEnabled
+    setTutorialEnabled(newState)
+    localStorage.setItem('medfuzzy-tutorial-disabled', (!newState).toString())
+    window.dispatchEvent(new Event('tutorialSettingsChanged'))
+  }
 
   return (
     <header className="bg-surface-container-lowest sticky top-0 z-50 border-b border-outline-variant shadow-sm animate-fade-in-down">
@@ -62,17 +76,37 @@ export default function Header() {
               account_circle
             </span>
           </button>
-          <button
-            className="text-on-surface-variant hover:text-primary transition-all duration-200 hover:scale-110 hover:rotate-90 active:scale-95"
-            aria-label="Configuración"
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontVariationSettings: "'FILL' 0" }}
+          <div className="relative">
+            <button
+              className="text-on-surface-variant hover:text-primary transition-all duration-200 hover:scale-110 active:scale-95"
+              aria-label="Configuración"
+              onClick={() => setSettingsOpen(!settingsOpen)}
             >
-              settings
-            </span>
-          </button>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontVariationSettings: "'FILL' 0" }}
+              >
+                settings
+              </span>
+            </button>
+            {settingsOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setSettingsOpen(false)} />
+                <div className="absolute right-0 top-12 w-56 bg-surface-container-lowest border border-outline-variant shadow-lg rounded-xl z-50 p-4 animate-scale-in origin-top-right">
+                  <h3 className="text-label-sm font-bold text-on-surface-variant mb-4 uppercase tracking-wider">Ajustes</h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-body-md text-on-surface font-medium">Tutorial Guiado</span>
+                    <button 
+                      onClick={toggleTutorial}
+                      className={`w-11 h-6 rounded-full transition-colors duration-300 relative focus:outline-none focus:ring-2 focus:ring-primary-container/50 ${tutorialEnabled ? 'bg-primary' : 'bg-surface-container-highest'}`}
+                    >
+                      <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ${tutorialEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           {/* Mobile hamburger */}
           <button

@@ -9,7 +9,13 @@ export default function TourGuide() {
   const [steps, setSteps] = useState<Step[]>([])
 
   useEffect(() => {
-    // Ya no usamos localStorage. El tutorial arranca siempre al cambiar de ruta.
+    // Escucha si se desactiva desde el menú de ajustes
+    const handleSettingsChange = () => {
+      const disabled = localStorage.getItem('medfuzzy-tutorial-disabled') === 'true'
+      if (disabled) setRun(false)
+    }
+    window.addEventListener('tutorialSettingsChanged', handleSettingsChange)
+    return () => window.removeEventListener('tutorialSettingsChanged', handleSettingsChange)
   }, [])
 
   useEffect(() => {
@@ -87,8 +93,10 @@ export default function TourGuide() {
 
     setSteps(routeSteps)
     
-    // Si hay pasos para esta ruta, mostramos el tutorial
-    if (routeSteps.length > 0) {
+    // Check global toggle
+    const disabled = localStorage.getItem('medfuzzy-tutorial-disabled') === 'true'
+    
+    if (routeSteps.length > 0 && !disabled) {
       setRun(true)
     } else {
       setRun(false)
