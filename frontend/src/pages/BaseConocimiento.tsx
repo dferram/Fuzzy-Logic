@@ -103,9 +103,14 @@ export default function BaseConocimiento() {
                   <tr key={row.nombre} className="hover:bg-surface-container-low/50 transition-colors">
                     <td className="p-4 text-body-md font-medium text-on-surface sticky left-0 bg-surface-container-lowest z-10 border-r border-outline-variant shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] group">
                       {row.nombre.replace(/_/g, ' ')}
-                      {/* Tooltip on hover for Origen */}
-                      <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 p-3 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
-                        <strong>Origen:</strong> {row.origen}
+                      {/* Tooltip on hover for Origen y Tratamiento */}
+                      <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-4 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg flex flex-col gap-2">
+                        <div>
+                          <strong className="text-primary-fixed-dim">Origen:</strong> {row.origen}
+                        </div>
+                        <div>
+                          <strong className="text-primary-fixed-dim">Tratamiento:</strong> {row.tratamiento}
+                        </div>
                       </div>
                     </td>
                     {SYMPTOM_NAMES.map((symptom) => {
