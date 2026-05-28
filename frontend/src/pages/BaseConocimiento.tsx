@@ -99,7 +99,7 @@ export default function BaseConocimiento() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/50">
-                {matriz.map((row, index) => (
+                {matriz.map((row) => (
                   <tr key={row.nombre} className="hover:bg-surface-container-low/50 transition-colors">
                     <td className="p-4 text-body-md font-medium text-on-surface sticky left-0 bg-surface-container-lowest z-10 border-r border-outline-variant shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] group">
                       {row.nombre.replace(/_/g, ' ')}

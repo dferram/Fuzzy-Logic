@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 export default function TourGuide() {
   const location = useLocation()
-  const navigate = useNavigate()
+
   const [run, setRun] = useState(false)
   const [steps, setSteps] = useState<Step[]>([])
 
