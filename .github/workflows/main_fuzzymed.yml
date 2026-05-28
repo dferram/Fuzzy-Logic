@@ -53,7 +53,7 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           cp backend/requirements.txt requirements.txt
-          zip -r release.zip backend/ frontend/dist/ requirements.txt -x "backend/__pycache__/*" "backend/app/__pycache__/*"
+          zip -r release.zip backend/ frontend/dist/ data/ requirements.txt -x "backend/__pycache__/*" "backend/app/__pycache__/*"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
