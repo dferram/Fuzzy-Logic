@@ -59,6 +59,11 @@ export default function Inicio() {
               inteligencia artificial avanzada.
             </p>
 
+            <div className="inline-flex items-center gap-2 text-label-md text-on-surface-variant/70 animate-fade-in-up delay-250">
+              <span className="material-symbols-outlined text-[16px]">person</span>
+              Diego Fernando Ramírez García
+            </div>
+
             <div className="mt-4 flex gap-4 justify-center w-full animate-fade-in-up delay-300">
               <Link
                 to="/diagnostico-general"
