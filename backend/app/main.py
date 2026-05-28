@@ -8,6 +8,18 @@ Configura:
     - Registro de routers.
 """
 
+import sys
+import os
+
+# ═══════════════════════════════════════════════════════════
+# CORRECCIÓN DE RUTAS PARA AZURE APP SERVICE
+# Añadimos la carpeta 'backend' al sys.path para que los imports
+# locales (from app.*) funcionen sin importar desde dónde se llame.
+# ═══════════════════════════════════════════════════════════
+backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
