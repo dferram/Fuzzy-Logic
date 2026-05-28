@@ -8,6 +8,11 @@ import {
   type ResultadoEnfermedad,
   type EnfermedadCatalogo,
 } from '../services/api'
+import {
+  getSymptomDescription,
+  getSymptomLevelName,
+  type SymptomKey,
+} from '../utils/symptomDescriptions'
 
 // ── Los 15 síntomas ──
 interface SymptomSlider {
@@ -94,6 +99,11 @@ export default function DiagnosticoEspecifico() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [response, setResponse] = useState<DiagnosticoResponse | null>(null)
+  const [lastModifiedSymptom, setLastModifiedSymptom] = useState<{
+    key: string
+    label: string
+    value: number
+  } | null>(null)
 
   const bannerReveal = useScrollReveal<HTMLDivElement>()
   const patientReveal = useScrollReveal<HTMLDivElement>()
@@ -124,6 +134,8 @@ export default function DiagnosticoEspecifico() {
 
   const handleSliderChange = (key: string, value: number) => {
     setValues((prev) => ({ ...prev, [key]: value }))
+    const symptomLabel = symptoms.find(s => s.key === key)?.label || key
+    setLastModifiedSymptom({ key, label: symptomLabel, value })
   }
 
   const toggleDisease = (nombre: string) => {
@@ -371,29 +383,64 @@ export default function DiagnosticoEspecifico() {
         </div>
 
         {/* Right Column: Results Panel */}
-        <div className="w-full lg:w-[35%]">
+        <div className="tour-de-explicacion w-full lg:w-[35%]">
           <div
             ref={resultsReveal.ref}
             className={`bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 sticky top-32 flex flex-col items-center justify-center text-center gap-6 min-h-[500px] shadow-sm transition-all duration-500 reveal-right ${resultsReveal.isVisible ? 'is-visible' : ''}`}
           >
             {!response ? (
-              <div className="flex flex-col items-center gap-6 animate-fade-in">
-                <div className="w-32 h-32 rounded-full bg-surface-container flex items-center justify-center mb-2 hover:scale-105 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-[64px] text-primary-container/40 animate-pulse">
-                    troubleshoot
-                  </span>
+              lastModifiedSymptom ? (
+                <div className="flex flex-col items-center gap-6 animate-scale-in w-full text-left">
+                  <div className="w-24 h-24 rounded-full bg-primary-container/10 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-[48px] text-primary-container">
+                      info
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-3 items-center w-full">
+                    <h3 className="text-headline-sm text-on-surface font-bold text-center">
+                      Síntoma Modificado
+                    </h3>
+                    <div className="w-12 h-1 bg-primary-container mx-auto rounded-full" />
+                  </div>
+                  <div className="bg-surface-container-low w-full rounded-xl p-5 border border-outline-variant shadow-sm mt-2">
+                    <p className="text-label-md text-primary-container uppercase tracking-wider mb-2">
+                      {lastModifiedSymptom.label}
+                    </p>
+                    <div className="flex justify-between items-end mb-4">
+                      <span className="text-headline-md font-bold text-on-surface">
+                        {lastModifiedSymptom.value}
+                      </span>
+                      <span className="text-label-md text-on-surface-variant bg-surface-container px-3 py-1 rounded-md font-semibold">
+                        {getSymptomLevelName(lastModifiedSymptom.value)}
+                      </span>
+                    </div>
+                    <p className="text-body-md text-on-surface-variant leading-relaxed">
+                      {getSymptomDescription(lastModifiedSymptom.key as SymptomKey, lastModifiedSymptom.value)}
+                    </p>
+                  </div>
+                  <p className="text-label-sm text-on-surface-variant/70 mt-4 text-center">
+                    Continúa configurando los síntomas y presiona "Evaluar Síntomas" al terminar.
+                  </p>
                 </div>
-                <div className="flex flex-col gap-3">
-                  <h3 className="text-headline-md text-on-surface font-bold">
-                    Esperando evaluacion
-                  </h3>
-                  <div className="w-12 h-1 bg-surface-container-high mx-auto rounded-full" />
+              ) : (
+                <div className="flex flex-col items-center gap-6 animate-fade-in">
+                  <div className="w-32 h-32 rounded-full bg-surface-container flex items-center justify-center mb-2 hover:scale-105 transition-transform duration-300">
+                    <span className="material-symbols-outlined text-[64px] text-primary-container/40 animate-pulse">
+                      troubleshoot
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-headline-md text-on-surface font-bold">
+                      Esperando evaluación
+                    </h3>
+                    <div className="w-12 h-1 bg-surface-container-high mx-auto rounded-full" />
+                  </div>
+                  <p className="text-body-lg text-on-surface-variant leading-relaxed max-w-[280px]">
+                    Configure los sintomas y seleccione enfermedades, luego presione
+                    &quot;Evaluar Sintomas&quot;.
+                  </p>
                 </div>
-                <p className="text-body-lg text-on-surface-variant leading-relaxed max-w-[280px]">
-                  Configure los sintomas y seleccione enfermedades, luego presione
-                  &quot;Evaluar Sintomas&quot;.
-                </p>
-              </div>
+              )
             ) : !response.confiable ? (
               <div className="flex flex-col items-center gap-6 animate-fade-in">
                 <div className="w-32 h-32 rounded-full bg-amber-100 flex items-center justify-center mb-2">

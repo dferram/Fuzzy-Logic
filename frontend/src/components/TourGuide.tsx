@@ -61,6 +61,12 @@ export default function TourGuide() {
           placement: 'top',
         },
         {
+          target: '.tour-dg-explicacion',
+          content: 'Revisa este panel mientras ajustas un síntoma. Te dará una descripción clínica exacta de lo que significa ese nivel de intensidad, para ayudarte a ser más preciso.',
+          title: 'Explicación Clínica Contextual',
+          placement: 'left',
+        },
+        {
           target: '.tour-dg-btn',
           content: 'Presiona Calcular para que el motor cruce los datos e infiera la probabilidad de cada enfermedad respiratoria.',
           title: 'Resultados Inmediatos',
@@ -81,6 +87,12 @@ export default function TourGuide() {
           content: 'Aquí la lógica difusa brilla: ajusta la barra en una escala de 0 a 100 para capturar la magnitud exacta del síntoma reportado por el paciente.',
           title: 'Precisión Milimétrica',
           placement: 'top',
+        },
+        {
+          target: '.tour-de-explicacion',
+          content: 'Revisa este panel al mover un control deslizante. Recibirás una explicación clínica detallada del nivel de intensidad que seleccionaste.',
+          title: 'Explicación Clínica Contextual',
+          placement: 'left',
         },
         {
           target: '.tour-de-btn',

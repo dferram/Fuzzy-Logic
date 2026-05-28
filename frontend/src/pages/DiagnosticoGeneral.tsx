@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { diagnosticoGeneral, type SintomasInput, type DiagnosticoResponse, type ResultadoEnfermedad } from '../services/api'
+import {
+  getSymptomDescription,
+  getSymptomLevelName,
+  type SymptomKey,
+} from '../utils/symptomDescriptions'
 
 // ── Los 15 síntomas con sus keys que mapean a SintomasInput ──
 interface SymptomSlider {
@@ -112,6 +117,11 @@ export default function DiagnosticoGeneral() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [response, setResponse] = useState<DiagnosticoResponse | null>(null)
+  const [lastModifiedSymptom, setLastModifiedSymptom] = useState<{
+    key: string
+    label: string
+    value: number
+  } | null>(null)
 
   const bannerReveal = useScrollReveal<HTMLDivElement>()
   const patientReveal = useScrollReveal<HTMLDivElement>()
@@ -119,6 +129,8 @@ export default function DiagnosticoGeneral() {
 
   const handleSliderChange = (key: string, value: number) => {
     setValues((prev) => ({ ...prev, [key]: value }))
+    const symptomLabel = symptoms.find(s => s.key === key)?.label || key
+    setLastModifiedSymptom({ key, label: symptomLabel, value })
   }
 
   const buildSintomasInput = (): SintomasInput => {
@@ -192,81 +204,140 @@ export default function DiagnosticoGeneral() {
         </div>
       </section>
 
-      {/* Symptoms Grid — 15 sliders (0-100) */}
-      <section
-        ref={symptomsReveal.ref}
-        className={`tour-dg-sintomas bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
-      >
-        <h2 className="text-headline-md text-primary-container mb-8 border-b border-surface-container-highest pb-4">
-          Evaluacion de Sintomas
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
-          {symptoms.map((symptom, i) => (
-            <div
-              key={symptom.key}
-              className={`flex flex-col gap-3 transition-all duration-500 ${
-                symptomsReveal.isVisible
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-4'
-              }`}
-              style={{
-                transitionDelay: symptomsReveal.isVisible
-                  ? `${i * 60}ms`
-                  : '0ms',
-              }}
-            >
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-body-lg font-semibold text-on-background flex items-center gap-3">
-                  <span
-                    className="material-symbols-outlined text-primary-container/70 text-2xl transition-transform duration-300 hover:scale-125"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    {symptom.icon}
+      <div className="flex flex-col lg:flex-row gap-10 items-start">
+        {/* Columna Izquierda: Síntomas */}
+        <section
+          ref={symptomsReveal.ref}
+          className={`w-full lg:w-[65%] tour-dg-sintomas bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)] card-hover reveal ${symptomsReveal.isVisible ? 'is-visible' : ''}`}
+        >
+          <h2 className="text-headline-md text-primary-container mb-8 border-b border-surface-container-highest pb-4">
+            Evaluacion de Sintomas
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            {symptoms.map((symptom, i) => (
+              <div
+                key={symptom.key}
+                className={`flex flex-col gap-3 transition-all duration-500 ${
+                  symptomsReveal.isVisible
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                }`}
+                style={{
+                  transitionDelay: symptomsReveal.isVisible
+                    ? `${i * 60}ms`
+                    : '0ms',
+                }}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-body-lg font-semibold text-on-background flex items-center gap-3">
+                    <span
+                      className="material-symbols-outlined text-primary-container/70 text-2xl transition-transform duration-300 hover:scale-125"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      {symptom.icon}
+                    </span>
+                    {symptom.label}
+                  </label>
+                  <span className="text-headline-sm font-bold text-primary-container bg-surface-container-low px-3 py-1 rounded-lg min-w-[3rem] text-center transition-all">
+                    {values[symptom.key]}
                   </span>
-                  {symptom.label}
-                </label>
-                <span className="text-headline-sm font-bold text-primary-container bg-surface-container-low px-3 py-1 rounded-lg min-w-[3rem] text-center transition-all">
-                  {values[symptom.key]}
-                </span>
+                </div>
+                <input
+                  className="w-full"
+                  max={100}
+                  min={0}
+                  step={1}
+                  type="range"
+                  value={values[symptom.key]}
+                  onChange={(e) =>
+                    handleSliderChange(symptom.key, Number(e.target.value))
+                  }
+                />
+                <div className="flex justify-between text-label-sm text-on-surface-variant mt-1 px-1">
+                  <span>Nada</span>
+                  <span>Muy Fuerte</span>
+                </div>
               </div>
-              <input
-                className="w-full"
-                max={100}
-                min={0}
-                step={1}
-                type="range"
-                value={values[symptom.key]}
-                onChange={(e) =>
-                  handleSliderChange(symptom.key, Number(e.target.value))
-                }
-              />
-              <div className="flex justify-between text-label-sm text-on-surface-variant mt-1 px-1">
-                <span>Nada</span>
-                <span>Muy Fuerte</span>
+            ))}
+          </div>
+          <div className="mt-12 flex justify-end">
+            <button
+              onClick={handleCalculate}
+              disabled={isLoading}
+              className="tour-dg-btn btn-primary bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <>
+                  <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                  Analizando...
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined">calculate</span>
+                  Calcular Diagnostico
+                </>
+              )}
+            </button>
+          </div>
+        </section>
+
+        {/* Columna Derecha: Panel Dinámico de Explicación */}
+        <div className="tour-dg-explicacion w-full lg:w-[35%] sticky top-32">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col items-center justify-center text-center gap-6 min-h-[400px] transition-all duration-500">
+            {lastModifiedSymptom ? (
+              <div className="flex flex-col items-center gap-6 animate-scale-in w-full text-left">
+                <div className="w-24 h-24 rounded-full bg-primary-container/10 flex items-center justify-center mb-2">
+                  <span className="material-symbols-outlined text-[48px] text-primary-container">
+                    info
+                  </span>
+                </div>
+                <div className="flex flex-col gap-3 items-center w-full">
+                  <h3 className="text-headline-sm text-on-surface font-bold text-center">
+                    Síntoma Modificado
+                  </h3>
+                  <div className="w-12 h-1 bg-primary-container mx-auto rounded-full" />
+                </div>
+                <div className="bg-surface-container-low w-full rounded-xl p-5 border border-outline-variant shadow-sm mt-2">
+                  <p className="text-label-md text-primary-container uppercase tracking-wider mb-2">
+                    {lastModifiedSymptom.label}
+                  </p>
+                  <div className="flex justify-between items-end mb-4">
+                    <span className="text-headline-md font-bold text-on-surface">
+                      {lastModifiedSymptom.value}
+                    </span>
+                    <span className="text-label-md text-on-surface-variant bg-surface-container px-3 py-1 rounded-md font-semibold">
+                      {getSymptomLevelName(lastModifiedSymptom.value)}
+                    </span>
+                  </div>
+                  <p className="text-body-md text-on-surface-variant leading-relaxed">
+                    {getSymptomDescription(lastModifiedSymptom.key as SymptomKey, lastModifiedSymptom.value)}
+                  </p>
+                </div>
+                <p className="text-label-sm text-on-surface-variant/70 mt-4 text-center">
+                  Ajusta los valores para obtener una descripción clínica que te ayude a ser preciso.
+                </p>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-12 flex justify-end">
-          <button
-            onClick={handleCalculate}
-            disabled={isLoading}
-            className="tour-dg-btn btn-primary bg-primary-container text-on-primary px-8 py-3.5 rounded-xl text-label-md font-semibold shadow-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
-              <>
-                <span className="material-symbols-outlined animate-spin">progress_activity</span>
-                Analizando...
-              </>
             ) : (
-              <>
-                <span className="material-symbols-outlined">calculate</span>
-                Calcular Diagnostico
-              </>
+              <div className="flex flex-col items-center gap-6 animate-fade-in">
+                <div className="w-32 h-32 rounded-full bg-surface-container flex items-center justify-center mb-2 hover:scale-105 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-[64px] text-primary-container/40 animate-pulse">
+                    touch_app
+                  </span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <h3 className="text-headline-md text-on-surface font-bold">
+                    Descripción del Síntoma
+                  </h3>
+                  <div className="w-12 h-1 bg-surface-container-high mx-auto rounded-full" />
+                </div>
+                <p className="text-body-lg text-on-surface-variant leading-relaxed max-w-[280px]">
+                  Mueve cualquier control deslizante para ver qué significa exactamente el nivel de intensidad que estás seleccionando.
+                </p>
+              </div>
             )}
-          </button>
+          </div>
         </div>
-      </section>
+      </div>
 
       {/* Error Message */}
       {error && (
