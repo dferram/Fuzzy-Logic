@@ -52,7 +52,8 @@ jobs:
       # ── Package Artifact ──────────────────────────────
       - name: Zip artifact for deployment
         run: |
-          zip -r release.zip backend/ frontend/dist/ venv/ -x "backend/__pycache__/*" "backend/app/__pycache__/*"
+          cp backend/requirements.txt requirements.txt
+          zip -r release.zip backend/ frontend/dist/ requirements.txt -x "backend/__pycache__/*" "backend/app/__pycache__/*"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
