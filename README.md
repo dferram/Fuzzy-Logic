@@ -8,7 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Azure](https://img.shields.io/badge/Azure_App_Service-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
 [![License](https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge)](./LICENSE)
 
@@ -55,7 +55,7 @@ El sistema se estructura en **tres módulos principales** que trabajan de forma 
 └────────────────────────────────┬────────────────────────────────────┘
                                  │
 ┌────────────────────────────────▼────────────────────────────────────┐
-│                       BASE DE DATOS (PostgreSQL)                    │
+│                        BASE DE DATOS (MongoDB)                      │
 │            Matriz difusa · Enfermedades · Síntomas                  │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -80,7 +80,7 @@ Toma los resultados del módulo general y aplica reglas de refinamiento para pre
 |------|-----------|-----------|
 | **Frontend** | React 18 + TypeScript | Interfaz de usuario interactiva y tipado seguro |
 | **Backend** | Python 3.11+ con FastAPI | API REST de alto rendimiento con documentación automática |
-| **Base de Datos** | PostgreSQL 15 | Almacenamiento relacional de la matriz difusa y catálogos |
+| **Base de Datos** | MongoDB | Almacenamiento documental de la matriz difusa y catálogos |
 | **Despliegue** | Azure App Service | Hosting en la nube con CI/CD integrado |
 | **Contenedores** | Docker + Docker Compose | Entorno de desarrollo reproducible |
 
@@ -92,7 +92,7 @@ Asegúrate de tener instalados los siguientes componentes antes de comenzar:
 
 - **Node.js** `>= 18.x` — [Descargar](https://nodejs.org/)
 - **Python** `>= 3.11` — [Descargar](https://www.python.org/downloads/)
-- **PostgreSQL** `>= 15` — [Descargar](https://www.postgresql.org/download/)
+- **MongoDB** — [Descargar](https://www.mongodb.com/try/download/community)
 - **Git** `>= 2.x` — [Descargar](https://git-scm.com/)
 - **pip** (incluido con Python)
 - **npm** (incluido con Node.js)
@@ -113,10 +113,8 @@ cd Fuzzy-Logic
 ### 2. Configurar la base de datos
 
 ```bash
-# Crear la base de datos en PostgreSQL
-psql -U postgres
-CREATE DATABASE fuzzydx_db;
-\q
+# Asegúrate de tener MongoDB ejecutándose localmente o configura tu URI de Atlas
+# La base de datos 'fuzzydx_db' se creará automáticamente al insertar datos.
 ```
 
 ### 3. Configurar variables de entorno
@@ -172,7 +170,8 @@ Crea un archivo `.env` en el directorio `backend/` con las siguientes variables:
 
 ```env
 # Base de Datos
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/fuzzydx_db
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DB_NAME=fuzzydx_db
 
 # Servidor
 APP_ENV=development
