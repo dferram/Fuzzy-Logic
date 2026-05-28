@@ -93,26 +93,38 @@ app.add_middleware(
 app.include_router(diagnostico.router)
 
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
 # ═══════════════════════════════════════════════════════════
 # ENDPOINT RAÍZ (Health Check)
 # ═══════════════════════════════════════════════════════════
-@app.get(
-    "/",
-    tags=["Health"],
-    summary="Health Check",
-    description="Verifica que el servidor está operativo.",
-)
+@app.get("/api/health", tags=["Health"], summary="Health Check")
 async def root():
     """Endpoint de verificación de estado."""
     return {
         "status": "ok",
         "service": "FuzzyDx API",
-        "version": "1.0.0",
-        "description": (
-            "Sistema de Diagnóstico de Enfermedades Respiratorias "
-            "basado en Lógica Difusa"
-        ),
+        "version": "1.0.0"
     }
+
+# ═══════════════════════════════════════════════════════════
+# SERVIR FRONTEND DE REACT
+# ═══════════════════════════════════════════════════════════
+frontend_dist = os.path.join(os.path.dirname(__file__), "../../frontend/dist")
+
+# Solo montamos los estáticos si la carpeta dist existe (es decir, en producción)
+if os.path.isdir(frontend_dist):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
+
+    # Cualquier ruta que no empiece con /api se redirige a index.html (para React Router)
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        index_path = os.path.join(frontend_dist, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        return {"error": "Frontend no encontrado en el servidor."}
 
 
 @app.get(
