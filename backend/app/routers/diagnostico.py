@@ -12,7 +12,7 @@ Y endpoints auxiliares:
 
 from fastapi import APIRouter, HTTPException, status
 
-from app.db.connection import get_database
+from app.db.connection import get_or_create_connection
 from app.models.schemas import (
     DiagnosticoGeneralRequest,
     DiagnosticoEspecificoRequest,
@@ -55,7 +55,7 @@ async def endpoint_diagnostico_general(
     Evalúa el vector de síntomas contra TODAS las enfermedades.
     """
     try:
-        db = get_database()
+        db = await get_or_create_connection()
         vector = request.sintomas.to_vector()
 
         response = await diagnostico_general(
@@ -98,7 +98,7 @@ async def endpoint_diagnostico_especifico(
     Evalúa el vector de síntomas contra las enfermedades seleccionadas.
     """
     try:
-        db = get_database()
+        db = await get_or_create_connection()
         vector = request.sintomas.to_vector()
 
         response = await diagnostico_especifico(
@@ -139,7 +139,7 @@ async def listar_enfermedades():
     Útil para poblar el selector del frontend.
     """
     try:
-        db = get_database()
+        db = await get_or_create_connection()
         collection = db["enfermedades"]
         cursor = collection.find(
             {},
@@ -193,7 +193,7 @@ async def obtener_matriz():
     Útil para mostrar la tabla de la matriz de conocimiento en el frontend.
     """
     try:
-        db = get_database()
+        db = await get_or_create_connection()
         collection = db["enfermedades"]
         # Excluimos el _id de MongoDB para la respuesta
         cursor = collection.find({}, {"_id": 0})

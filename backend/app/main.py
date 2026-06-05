@@ -12,7 +12,7 @@ import sys
 import os
 
 # ═══════════════════════════════════════════════════════════
-# CORRECCIÓN DE RUTAS PARA AZURE APP SERVICE
+# CORRECCIÓN DE RUTAS PARA VERCEL / entornos de deploy
 # Añadimos la carpeta 'backend' al sys.path para que los imports
 # locales (from app.*) funcionen sin importar desde dónde se llame.
 # ═══════════════════════════════════════════════════════════
@@ -25,32 +25,30 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.db.connection import connect_to_mongo, close_mongo_connection, get_database
+from app.db.connection import get_or_create_connection, close_mongo_connection
 from app.db.seed import seed_enfermedades
 from app.routers import diagnostico
 
 
 # ═══════════════════════════════════════════════════════════
 # CICLO DE VIDA DE LA APLICACIÓN
+# Usamos lifespan pero con manejo de errores para que no
+# bloquee el startup en entornos serverless (Vercel).
 # ═══════════════════════════════════════════════════════════
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Gestiona los eventos startup y shutdown de FastAPI.
-    - startup:  conecta a MongoDB y ejecuta el seed.
-    - shutdown: cierra la conexión a MongoDB.
-    """
     # ── STARTUP ──────────────────────────────────────────
-    await connect_to_mongo()
-    db = get_database()
-    await seed_enfermedades(db)
-
-    print("[APP] FuzzyDx Backend iniciado correctamente.")
-    print(f"   > Entorno:   {settings.APP_ENV}")
-    print(f"   > Puerto:    {settings.APP_PORT}")
-    print(f"   > MongoDB:   {settings.MONGODB_DB_NAME}")
-    print(f"   > Umbral:    {settings.FUZZY_THRESHOLD}")
-    print(f"   > CORS:      {settings.cors_origins_list}")
+    try:
+        db = await get_or_create_connection()
+        await seed_enfermedades(db)
+        print("[APP] FuzzyDx Backend iniciado correctamente.")
+        print(f"   > Entorno:   {settings.APP_ENV}")
+        print(f"   > MongoDB:   {settings.MONGODB_DB_NAME}")
+        print(f"   > Umbral:    {settings.FUZZY_THRESHOLD}")
+        print(f"   > CORS:      {settings.cors_origins_list}")
+    except Exception as e:
+        print(f"[APP] Advertencia en startup: {e}")
+        print("[APP] El backend iniciará de todas formas (lazy connection).")
 
     yield
 
@@ -82,6 +80,7 @@ app = FastAPI(
         "name": "MIT",
     },
     lifespan=lifespan,
+    # En Vercel, la app se sirve como ASGI directamente
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -147,7 +146,7 @@ if os.path.isdir(frontend_dist):
 async def health_check():
     """Verifica la salud del servidor y la conexión a la base de datos."""
     try:
-        db = get_database()
+        db = await get_or_create_connection()
         count = await db["enfermedades"].count_documents({})
         db_status = "connected"
     except Exception as e:
