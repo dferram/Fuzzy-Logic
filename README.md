@@ -206,5 +206,6 @@ The core of the system is a **fuzzy matrix** that relates **10 respiratory disea
 > **Autonomous University of Queretaro** — Faculty of Informatics UAQ
 > Subject: Artificial Intelligence
 > 2026
+> [FuzzyLogic](https://fuzzy-logic-zeta.vercel.app/)
 
 ---
