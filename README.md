@@ -1,8 +1,8 @@
 <div align="center">
+  
+# FuzzyDx — Respiratory Disease Diagnostic System
 
-# FuzzyDx — Sistema de Diagnóstico de Enfermedades Respiratorias
-
-### Basado en Lógica Difusa
+### Based on Fuzzy Logic
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -14,186 +14,164 @@
 
 ---
 
-Sistema web de diagnóstico médico orientativo que evalúa el grado de coincidencia entre los síntomas reportados por un paciente y los patrones clínicos de **enfermedades respiratorias**, utilizando **intersección de conjuntos difusos** como motor de inferencia.
+An orientative medical diagnostic web system that evaluates the degree of match between symptoms reported by a patient and clinical patterns of **respiratory diseases**, using **fuzzy set intersection** as the inference engine.
 
-**Disclaimer:** Este sistema es un proyecto académico y **no sustituye** la opinión de un profesional de la salud.
+**Disclaimer:** This system is an academic project and **does not substitute** the opinion of a healthcare professional.
 
 </div>
 
 ---
 
-## Tabla de Contenidos
+## Table of Contents
 
-- [Arquitectura del Sistema](#-arquitectura-del-sistema)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Requisitos Previos](#-requisitos-previos)
-- [Instalación y Ejecución](#-instalación-y-ejecución)
-- [Variables de Entorno](#-variables-de-entorno)
-- [Estructura de la Base de Datos](#-estructura-de-la-base-de-datos)
-- [Documentación](#-documentación)
-- [Autores](#-autores)
+- [System Architecture](#system-architecture)
+- [Technologies Used](#technologies-used)
+- [Prerequisites](#prerequisites)
+- [Installation and Execution](#installation-and-execution)
+- [Database Structure](#database-structure)
+- [Authors](#authors)
 
 ---
 
-## Arquitectura del Sistema
+## System Architecture
 
-El sistema se estructura en **tres módulos principales** que trabajan de forma secuencial para generar un diagnóstico basado en lógica difusa:
+The system is structured into **three main modules** that work sequentially to generate a diagnosis based on fuzzy logic:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        FRONTEND (React + TS)                        │
-│   Captura de síntomas · Visualización de resultados · Dashboard     │
+│                       FRONTEND (React + TS)                         │
+│     Symptom capture · Results visualization · Dashboard             │
 └────────────────────────────────┬────────────────────────────────────┘
                                  │  REST API
 ┌────────────────────────────────▼────────────────────────────────────┐
 │                      BACKEND (FastAPI / Python)                     │
-│  ┌──────────────┐  ┌─────────────────────┐  ┌───────────────────┐  │
-│  │  Módulo       │  │  Módulo de          │  │  Módulo de        │  │
-│  │  Pre-cargado  │──▶  Diagnóstico       │──▶  Diagnóstico     │  │
-│  │              │  │  General            │  │  Específico       │  │
-│  └──────────────┘  └─────────────────────┘  └───────────────────┘  │
+│  ┌──────────────┐  ┌─────────────────────┐  ┌───────────────────┐   │
+│  │  Pre-loaded  │  │  General            │  │  Specific         │   │
+│  │  Module      │──▶  Diagnosis          │──▶  Diagnosis        │   │
+│  │              │  │  Module             │  │  Module           │   │
+│  └──────────────┘  └─────────────────────┘  └───────────────────┘   │
 └────────────────────────────────┬────────────────────────────────────┘
                                  │
 ┌────────────────────────────────▼────────────────────────────────────┐
-│                        BASE DE DATOS (MongoDB)                      │
-│            Matriz difusa · Enfermedades · Síntomas                  │
+│                       DATABASE (MongoDB)                            │
+│               Fuzzy matrix · Diseases · Symptoms                    │
 └─────────────────────────────────────────────────────────────────────┘
+
 ```
 
-### Módulo Pre-cargado
+### Pre-loaded Module
 
-Contiene la **base de conocimiento** del sistema: una matriz difusa que relaciona enfermedades respiratorias con sus síntomas característicos. Cada relación está cuantificada con un valor de pertenencia en el rango `[0.0, 1.0]`, donde `1.0` indica máxima correlación y `0.0` indica ausencia de relación.
+Contains the system's **knowledge base**: a fuzzy matrix relating respiratory diseases to their characteristic symptoms. Each relationship is quantified with a membership value in the range `[0.0, 1.0]`, where `1.0` indicates maximum correlation and `0.0` indicates no relationship.
 
-### Módulo de Diagnóstico General
+### General Diagnosis Module
 
-Recibe los síntomas capturados del usuario y realiza una **fuzzificación** de las entradas. Aplica la operación de **intersección de conjuntos difusos** (operador mín) entre el vector de síntomas del paciente y cada fila de la matriz de enfermedades, generando un ranking preliminar de posibles diagnósticos.
+Receives the symptoms captured from the user and performs a **fuzzification** of the inputs. It applies the **fuzzy set intersection** operation (min operator) between the patient's symptom vector and each row of the disease matrix, generating a preliminary ranking of possible diagnoses.
 
-### Módulo de Diagnóstico Específico
+### Specific Diagnosis Module
 
-Toma los resultados del módulo general y aplica reglas de refinamiento para presentar al usuario un **diagnóstico detallado**: grado de coincidencia porcentual, síntomas clave que contribuyeron al resultado, y recomendaciones generales asociadas a cada enfermedad identificada.
-
----
-
-## Tecnologías Utilizadas
-
-| Capa | Tecnología | Propósito |
-|------|-----------|-----------|
-| **Frontend** | React 18 + TypeScript | Interfaz de usuario interactiva y tipado seguro |
-| **Backend** | Python 3.11+ con FastAPI | API REST de alto rendimiento con documentación automática |
-| **Base de Datos** | MongoDB | Almacenamiento documental de la matriz difusa y catálogos |
-| **Despliegue** | Azure App Service | Hosting en la nube con CI/CD integrado |
-| **Contenedores** | Docker + Docker Compose | Entorno de desarrollo reproducible |
+Takes the results from the general module and applies refinement rules to present the user with a **detailed diagnosis**: percentage match degree, key symptoms that contributed to the result, and general recommendations associated with each identified disease.
 
 ---
 
-## Requisitos Previos
+## Technologies Used
 
-Asegúrate de tener instalados los siguientes componentes antes de comenzar:
-
-- **Node.js** `>= 18.x` — [Descargar](https://nodejs.org/)
-- **Python** `>= 3.11` — [Descargar](https://www.python.org/downloads/)
-- **MongoDB** — [Descargar](https://www.mongodb.com/try/download/community)
-- **Git** `>= 2.x` — [Descargar](https://git-scm.com/)
-- **pip** (incluido con Python)
-- **npm** (incluido con Node.js)
-
-> **Opcional:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) si prefieres levantar todo el entorno con contenedores.
+| Layer | Technology | Purpose |
+| --- | --- | --- |
+| **Frontend** | React 18 + TypeScript | Interactive user interface and safe typing |
+| **Backend** | Python 3.11+ with FastAPI | High-performance REST API with automatic documentation |
+| **Database** | MongoDB | Document storage for the fuzzy matrix and catalogs |
+| **Deployment** | Azure App Service | Cloud hosting with integrated CI/CD |
+| **Containers** | Docker + Docker Compose | Reproducible development environment |
 
 ---
 
-## Instalación y Ejecución
+## Prerequisites
 
-### 1. Clonar el repositorio
+Make sure you have the following components installed before starting:
+
+* **Node.js** `>= 18.x` — [Download](https://nodejs.org/)
+* **Python** `>= 3.11` — [Download](https://www.python.org/downloads/)
+* **MongoDB** — [Download](https://www.mongodb.com/try/download/community)
+* **Git** `>= 2.x` — [Download](https://git-scm.com/)
+* **pip** (included with Python)
+* **npm** (included with Node.js)
+
+> **Optional:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) if you prefer to set up the whole environment with containers.
+
+---
+
+## Installation and Execution
+
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/dferram/Fuzzy-Logic.git
+git clone [https://github.com/dferram/Fuzzy-Logic.git](https://github.com/dferram/Fuzzy-Logic.git)
 cd Fuzzy-Logic
+
 ```
 
-### 2. Configurar la base de datos
+### 2. Configure the database
 
 ```bash
-# Asegúrate de tener MongoDB ejecutándose localmente o configura tu URI de Atlas
-# La base de datos 'fuzzydx_db' se creará automáticamente al insertar datos.
+# Make sure you have MongoDB running locally or configure your Atlas URI
+# The 'fuzzydx_db' database will be created automatically when inserting data.
+
 ```
 
-### 3. Configurar variables de entorno
+### 3. Configure environment variables
 
-Crea un archivo `.env` en la raíz del proyecto backend (ver sección [Variables de Entorno](#-variables-de-entorno)).
+Create a `.env` file in the root of the backend project (see [Environment Variables](https://www.google.com/search?q=%23environment-variables) section).
 
-### 4. Backend — Instalar y ejecutar
+### 4. Backend — Install and run
 
 ```bash
 cd backend
 
-# Crear entorno virtual
+# Create virtual environment
 python -m venv venv
 
-# Activar entorno virtual
+# Activate virtual environment
 # Windows:
 venv\Scripts\activate
 # macOS/Linux:
 source venv/bin/activate
 
-# Instalar dependencias
+# Install dependencies
 pip install -r requirements.txt
 
-# Ejecutar migraciones de la base de datos
+# Run database migrations
 alembic upgrade head
 
-# Iniciar el servidor de desarrollo
+# Start development server
 uvicorn app.main:app --reload --port 8000
+
 ```
 
-El servidor estará disponible en `http://localhost:8000`.
-La documentación interactiva de la API (Swagger UI) estará en `http://localhost:8000/docs`.
+The server will be available at `http://localhost:8000`.
+The interactive API documentation (Swagger UI) will be at `http://localhost:8000/docs`.
 
-### 5. Frontend — Instalar y ejecutar
+### 5. Frontend — Install and run
 
 ```bash
 cd frontend
 
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Iniciar el servidor de desarrollo
+# Start development server
 npm run dev
+
 ```
 
-La aplicación estará disponible en `http://localhost:5173`.
+The application will be available at `http://localhost:5173`.
 
 ---
 
-## Variables de Entorno
+## Database Structure
 
-Crea un archivo `.env` en el directorio `backend/` con las siguientes variables:
+The core of the system is a **fuzzy matrix** that relates **10 respiratory diseases** to **15 clinical symptoms**. Each cell in the matrix contains a fuzzy membership value in the range **`[0.0 — 1.0]`**.
 
-```env
-# Base de Datos
-MONGODB_URI=mongodb://localhost:27017
-MONGODB_DB_NAME=fuzzydx_db
-
-# Servidor
-APP_ENV=development
-APP_PORT=8000
-APP_HOST=0.0.0.0
-
-# CORS
-CORS_ORIGINS=http://localhost:5173
-
-# Azure (solo para producción)
-# AZURE_CONNECTION_STRING=<tu-connection-string>
-```
-
-> **Nota:** Nunca subas el archivo `.env` al repositorio. Asegúrate de que esté incluido en `.gitignore`.
-
----
-
-## Estructura de la Base de Datos
-
-El núcleo del sistema es una **matriz difusa** que relaciona **10 enfermedades respiratorias** con **15 síntomas clínicos**. Cada celda de la matriz contiene un valor de pertenencia difusa en el rango **`[0.0 — 1.0]`**.
-
-```
+```text
               S₁    S₂    S₃    S₄   ...   S₁₅
          ┌────────────────────────────────────────┐
   E₁     │ 0.9   0.3   0.7   0.1   ...   0.5    │
@@ -203,28 +181,30 @@ El núcleo del sistema es una **matriz difusa** que relaciona **10 enfermedades 
   E₁₀    │ 0.4   0.6   0.3   0.8   ...   0.7    │
          └────────────────────────────────────────┘
 
-  Eₙ = Enfermedad n    Sₙ = Síntoma n
-  Valor = Grado de pertenencia difusa [0.0, 1.0]
+  Eₙ = Disease n     Sₙ = Symptom n
+  Value = Fuzzy membership degree [0.0, 1.0]
+
 ```
 
-**Tablas principales:**
+**Main tables:**
 
-| Tabla | Descripción |
-|-------|-------------|
-| `enfermedades` | Catálogo de 10 enfermedades respiratorias (nombre, descripción, recomendaciones) |
-| `sintomas` | Catálogo de 15 síntomas clínicos evaluables |
-| `matriz_difusa` | Relación enfermedad-síntoma con valor de pertenencia (0.0 a 1.0) |
-| `diagnosticos` | Historial de consultas realizadas por los usuarios |
+| Table | Description |
+| --- | --- |
+| `enfermedades` | Catalog of 10 respiratory diseases (name, description, recommendations) |
+| `sintomas` | Catalog of 15 evaluable clinical symptoms |
+| `matriz_difusa` | Disease-symptom relationship with membership value (0.0 to 1.0) |
+| `diagnosticos` | History of queries made by users |
 
 ---
 
-## Autores
+## Authors
 
-| Nombre | GitHub | Rol |
-|--------|--------|-----|
+| Name | GitHub | Role |
+| --- | --- | --- |
 | Fernando Ramírez | [@dferram](https://github.com/dferram) | Full-Stack Developer |
 
-> **Universidad Autónoma de Querétaro** — Facultad de Informática UAQ
-> Materia: Inteligencia Artificial
+> **Autonomous University of Queretaro** — Faculty of Informatics UAQ
+> Subject: Artificial Intelligence
 > 2026
+
 ---
