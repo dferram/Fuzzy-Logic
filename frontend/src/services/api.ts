@@ -4,7 +4,10 @@
  * Centraliza todas las llamadas HTTP hacia /api/diagnostico/*.
  */
 
-const BASE_URL = '/api/diagnostico'
+// En desarrollo: el proxy de Vite redirige /api → localhost:8000
+// En producción: apunta al backend desplegado en Vercel
+const BASE_URL = `${import.meta.env.VITE_API_URL ?? ''}/api/diagnostico`
+
 
 // ═══════════════════════════════════════════════════════════
 // TIPOS (espejan los schemas de Pydantic del backend)
