@@ -5,8 +5,13 @@
  */
 
 // En desarrollo: el proxy de Vite redirige /api → localhost:8000
-// En producción: apunta al backend desplegado en Vercel
-const BASE_URL = `${import.meta.env.VITE_API_URL ?? ''}/api/diagnostico`
+// En producción: apunta directamente al backend en Vercel
+const BACKEND_URL =
+  import.meta.env.MODE === 'production'
+    ? 'https://fuzzy-logic-ppnn.vercel.app'
+    : ''
+
+const BASE_URL = `${BACKEND_URL}/api/diagnostico`
 
 
 // ═══════════════════════════════════════════════════════════
