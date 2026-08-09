@@ -2,6 +2,8 @@
   
 # FuzzyDx — Respiratory Disease Diagnostic System
 
+<img src="./assets/informatica.png" alt="Logo Informática" width="150" />
+
 ### Based on Fuzzy Logic
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)

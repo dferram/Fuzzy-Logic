@@ -14,7 +14,6 @@ class Settings(BaseSettings):
 
     # ── MongoDB ──────────────────────────────────────────
     # Nota: Temporalmente hardcodeado para que funcione en Vercel de inmediato.
-    # Idealmente, deberías remover esto en el futuro y usar las variables de entorno de Vercel.
     MONGODB_URI: str = "mongodb+srv://dferram:Bean2023@fuzzylogic.2ffurpb.mongodb.net/?appName=FuzzyLogic"
     MONGODB_DB_NAME: str = "fuzzydx_db"
 
