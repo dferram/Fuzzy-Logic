@@ -108,11 +108,20 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 
+@app.get("/", tags=["Root"])
+async def read_root():
+    """Endpoint raíz para evitar 404."""
+    return {
+        "message": "FuzzyDx API está funcionando correctamente.",
+        "docs": "/docs",
+        "health": "/api/health"
+    }
+
 # ═══════════════════════════════════════════════════════════
-# ENDPOINT RAÍZ (Health Check)
+# ENDPOINT HEALTH (Health Check)
 # ═══════════════════════════════════════════════════════════
 @app.get("/api/health", tags=["Health"], summary="Health Check")
-async def root():
+async def health_api():
     """Endpoint de verificación de estado."""
     return {
         "status": "ok",
