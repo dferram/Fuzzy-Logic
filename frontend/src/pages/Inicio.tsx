@@ -6,8 +6,8 @@ export default function Inicio() {
   const card1 = useScrollReveal<HTMLDivElement>()
   const card2 = useScrollReveal<HTMLDivElement>({ threshold: 0.1 })
   const card3 = useScrollReveal<HTMLDivElement>({ threshold: 0.1 })
-  const benefitsLeft = useScrollReveal<HTMLDivElement>()
-  const benefitsRight = useScrollReveal<HTMLDivElement>()
+  const explanationLeft = useScrollReveal<HTMLDivElement>()
+  const explanationRight = useScrollReveal<HTMLDivElement>()
 
   return (
     <>
@@ -45,9 +45,9 @@ export default function Inicio() {
           <div className="z-10 flex flex-col items-center gap-6 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed rounded-full text-primary-container text-label-md w-fit animate-fade-in-down">
               <span className="material-symbols-outlined text-[16px]">
-                psychiatry
+                school
               </span>
-              Sistema de Soporte a la Decisión
+              Proyecto Académico Universitario
             </div>
 
             <h1 className="text-headline-lg-mobile md:text-headline-lg text-on-surface animate-fade-in-up delay-100">
@@ -55,37 +55,37 @@ export default function Inicio() {
             </h1>
 
             <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto animate-fade-in-up delay-200">
-              Transformando síntomas ambiguos en decisiones precisas mediante
-              inteligencia artificial avanzada.
+              Un proyecto de investigación que implementa la Teoría de Conjuntos Difusos 
+              para modelar la incertidumbre inherente en el diagnóstico médico de enfermedades respiratorias.
             </p>
 
             <div className="inline-flex items-center gap-2 text-label-md text-on-surface-variant/70 animate-fade-in-up delay-250">
               <span className="material-symbols-outlined text-[16px]">person</span>
-              Diego Fernando Ramírez García
+              Diego Fernando Ramírez García | UAQ - Facultad de Informática
             </div>
 
             <div className="mt-4 flex gap-4 justify-center w-full animate-fade-in-up delay-300">
               <Link
                 to="/diagnostico-general"
-                className="tour-inicio-btn btn-primary bg-primary text-on-primary px-6 py-3 rounded-lg text-label-md shadow-md flex items-center gap-2"
+                className="tour-inicio-btn btn-primary bg-primary text-on-primary px-6 py-3 rounded-lg text-label-md shadow-md flex items-center gap-2 hover:-translate-y-0.5 transition-all"
               >
-                Comenzar Diagnóstico
+                Probar Sistema
                 <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">
-                  arrow_forward
+                  science
                 </span>
               </Link>
               <a
                 href="#tecnologia"
                 className="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-3 rounded-lg text-label-md hover:bg-surface-container-low hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5"
               >
-                Saber Más
+                Ver Marco Teórico
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Technology Section */}
+      {/* Explicacion Teórica Section */}
       <section id="tecnologia" className="tour-inicio-tecnologia w-full bg-surface py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto px-4 md:px-16 flex flex-col gap-12">
           <div
@@ -93,12 +93,12 @@ export default function Inicio() {
             className={`text-center max-w-2xl mx-auto reveal ${techSection.isVisible ? 'is-visible' : ''}`}
           >
             <h2 className="text-headline-md text-on-surface mb-4">
-              La Ventaja de la Lógica Difusa
+              Fundamentos de la Lógica Difusa
             </h2>
             <p className="text-body-md text-on-surface-variant">
-              La medicina no es binaria. Nuestro motor de inferencia capta la
-              sutileza de la descripción del paciente, operando en el espectro
-              entre &lsquo;sano&rsquo; y &lsquo;enfermo&rsquo;.
+              A diferencia de la lógica booleana clásica donde un elemento pertenece o no pertenece a un conjunto (0 o 1), 
+              la lógica difusa introducida por Lotfi A. Zadeh permite grados de pertenencia continuos entre 0 y 1, 
+              modelando matemáticamente el razonamiento aproximado humano.
             </p>
           </div>
 
@@ -115,16 +115,15 @@ export default function Inicio() {
                   className="material-symbols-outlined"
                   style={{ fontVariationSettings: "'FILL' 1" }}
                 >
-                  forum
+                  functions
                 </span>
               </div>
               <h3 className="text-headline-sm text-on-surface mb-3">
-                Lenguaje Natural
+                Conjuntos Difusos
               </h3>
               <p className="text-body-md text-on-surface-variant">
-                Interpreta descripciones vagas como &ldquo;un poco de
-                fiebre&rdquo; o &ldquo;dolor moderado&rdquo; asignándoles
-                valores matemáticos precisos para el análisis.
+                Se definen conjuntos como "Fiebre Alta" o "Dolor Severo". Un paciente no simplemente "tiene" o "no tiene" el síntoma, 
+                sino que posee un grado de pertenencia (ej. 0.8) a ese conjunto difuso, reflejando la realidad médica.
               </p>
             </div>
 
@@ -140,16 +139,16 @@ export default function Inicio() {
                   className="material-symbols-outlined"
                   style={{ fontVariationSettings: "'FILL' 1" }}
                 >
-                  donut_large
+                  alt_route
                 </span>
               </div>
               <h3 className="text-headline-sm text-on-surface mb-3">
-                Intersección Difusa
+                Norma T del Mínimo
               </h3>
               <p className="text-body-md text-on-surface-variant">
-                Calcula la probabilidad de patologías cruzando múltiples
-                conjuntos de síntomas difusos, reflejando la complejidad real
-                del cuadro clínico.
+                Para inferir la intersección entre los síntomas del paciente y los patrones de la enfermedad, 
+                utilizamos la norma T de Zadeh (operador de mínimo). Así garantizamos matemáticamente 
+                el cálculo de la superposición de conjuntos.
               </p>
             </div>
 
@@ -165,57 +164,56 @@ export default function Inicio() {
                   className="material-symbols-outlined"
                   style={{ fontVariationSettings: "'FILL' 1" }}
                 >
-                  track_changes
+                  clinical_notes
                 </span>
               </div>
               <h3 className="text-headline-sm text-on-surface mb-3">
-                Precisión Clínica
+                Motor de Inferencia
               </h3>
               <p className="text-body-md text-on-surface-variant">
-                Genera un índice de confianza para cada diagnóstico sugerido,
-                permitiendo al profesional médico priorizar las vías de
-                investigación.
+                El sistema evalúa el vector difuso de entrada (síntomas) contra 10 bases de conocimiento (enfermedades respiratorias), 
+                calculando un índice de coincidencia normalizado (defusificación implícita) para emitir resultados.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {/* Aplicacion Medica Section */}
       <section className="w-full bg-surface-container-low py-16 md:py-24 border-t border-outline-variant">
         <div className="max-w-[1200px] mx-auto px-4 md:px-16">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left: Benefits List */}
+            {/* Left: Explanation List */}
             <div
-              ref={benefitsLeft.ref}
-              className={`reveal-left ${benefitsLeft.isVisible ? 'is-visible' : ''}`}
+              ref={explanationLeft.ref}
+              className={`reveal-left ${explanationLeft.isVisible ? 'is-visible' : ''}`}
             >
               <h2 className="text-headline-md text-on-surface mb-6">
-                Por qué elegir MedFuzzy
+                El Problema del Diagnóstico Convencional
               </h2>
               <div className="flex flex-col gap-8 mt-8">
                 {[
                   {
-                    icon: 'check_circle',
-                    title: 'Simplicidad',
-                    desc: 'Interfaz intuitiva diseñada para integrarse sin fricción en el flujo de trabajo clínico habitual.',
+                    icon: 'warning',
+                    title: 'Ambigüedad Semántica',
+                    desc: 'Los pacientes expresan síntomas con términos vagos ("me duele un poco", "tengo algo de temperatura"). La lógica clásica booleana fuerza estas expresiones a verdades absolutas, perdiendo información crucial.',
                   },
                   {
-                    icon: 'shield',
-                    title: 'Seguridad',
-                    desc: 'Soporte basado en evidencia académica rigurosa, operando siempre como una herramienta de apoyo, no de reemplazo.',
+                    icon: 'join_inner',
+                    title: 'Solución Propuesta',
+                    desc: 'Este proyecto de Inteligencia Artificial captura esa incertidumbre. Mapea expresiones lingüísticas a valores difusos [0,1], permitiendo que la computadora razone con información imprecisa de forma estructurada.',
                   },
                   {
-                    icon: 'devices',
-                    title: 'Accesibilidad',
-                    desc: 'Disponible en múltiples plataformas con un tiempo de respuesta inmediato en entornos de alta exigencia.',
+                    icon: 'biotech',
+                    title: 'Contexto Académico',
+                    desc: 'Este es un sistema experto desarrollado como proyecto universitario, demostrando cómo los modelos formales matemáticos de la IA pueden aplicarse al razonamiento clínico.',
                   },
-                ].map((benefit, i) => (
+                ].map((item, i) => (
                   <div
-                    key={benefit.title}
+                    key={item.title}
                     className="flex gap-4 group"
                     style={{
-                      transitionDelay: benefitsLeft.isVisible
+                      transitionDelay: explanationLeft.isVisible
                         ? `${i * 150}ms`
                         : '0ms',
                     }}
@@ -225,15 +223,15 @@ export default function Inicio() {
                         className="material-symbols-outlined"
                         style={{ fontVariationSettings: "'FILL' 1" }}
                       >
-                        {benefit.icon}
+                        {item.icon}
                       </span>
                     </div>
                     <div>
                       <h4 className="text-headline-sm text-on-surface">
-                        {benefit.title}
+                        {item.title}
                       </h4>
                       <p className="text-body-md text-on-surface-variant mt-1">
-                        {benefit.desc}
+                        {item.desc}
                       </p>
                     </div>
                   </div>
@@ -241,66 +239,45 @@ export default function Inicio() {
               </div>
             </div>
 
-            {/* Right: Inference Simulator Card */}
+            {/* Right: Academic Diagram/Explanation */}
             <div
-              ref={benefitsRight.ref}
-              className={`bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant shadow-sm card-hover reveal-right ${benefitsRight.isVisible ? 'is-visible' : ''}`}
+              ref={explanationRight.ref}
+              className={`bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant shadow-sm card-hover reveal-right ${explanationRight.isVisible ? 'is-visible' : ''}`}
             >
               <div className="border-b border-outline-variant pb-4 mb-4 flex justify-between items-center">
                 <h3 className="text-headline-sm text-on-surface">
-                  Simulador de Inferencia
+                  Modelo Matemático de Inferencia
                 </h3>
-                <span className="material-symbols-outlined text-outline hover:rotate-180 transition-transform duration-500 cursor-pointer">
-                  tune
+                <span className="material-symbols-outlined text-outline">
+                  calculate
                 </span>
               </div>
               <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-label-md text-on-surface">
-                      Intensidad del Dolor
-                    </span>
-                    <span className="text-label-sm text-primary">
-                      Moderado-Alto
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-primary rounded-full transition-all duration-1000 ease-out ${
-                        benefitsRight.isVisible ? 'w-2/3' : 'w-0'
-                      }`}
-                    />
-                  </div>
+                <div className="bg-surface p-4 rounded-lg border border-outline-variant text-center">
+                  <p className="font-mono text-sm text-on-surface font-semibold mb-2">
+                    Cálculo de Intersección (Norma T)
+                  </p>
+                  <p className="font-mono text-xs text-on-surface-variant">
+                    μ_{`{A ∩ B}`}(x) = min[μ_A(x), μ_B(x)]
+                  </p>
                 </div>
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-label-md text-on-surface">
-                      Duración Síntomas
-                    </span>
-                    <span className="text-label-sm text-secondary">Agudo</span>
-                  </div>
-                  <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-secondary rounded-full transition-all duration-1000 ease-out delay-300 ${
-                        benefitsRight.isVisible ? 'w-1/4' : 'w-0'
-                      }`}
-                    />
-                  </div>
+                
+                <p className="text-body-sm text-on-surface-variant leading-relaxed">
+                  Para cada enfermedad <i>E</i> en la base de conocimiento y el conjunto de síntomas reportados por el paciente <i>P</i>:
+                </p>
+
+                <div className="bg-surface p-4 rounded-lg border border-outline-variant text-center">
+                  <p className="font-mono text-sm text-on-surface font-semibold mb-2">
+                    Índice de Coincidencia (C)
+                  </p>
+                  <p className="font-mono text-xs text-on-surface-variant">
+                    C(P, E) = {`{Σ_{i=1}^n min(P_i, E_i)}`} / n
+                  </p>
                 </div>
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-6">
-                  <div className="text-sm text-label-sm text-primary mb-1">
-                    Confianza Diagnóstica
-                  </div>
-                  <div
-                    className={`text-2xl text-headline-md text-primary transition-all duration-700 delay-500 ${
-                      benefitsRight.isVisible
-                        ? 'opacity-100 translate-y-0'
-                        : 'opacity-0 translate-y-2'
-                    }`}
-                  >
-                    87.4%
-                  </div>
-                </div>
+
+                <p className="text-body-sm text-on-surface-variant leading-relaxed text-center">
+                  Donde <b>n</b> es el número total de síntomas evaluables (15). El resultado final es un grado de pertenencia global que indica qué tan posible es que el paciente posea el cuadro clínico de la enfermedad evaluada.
+                </p>
               </div>
             </div>
           </div>
